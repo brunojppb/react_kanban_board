@@ -12,7 +12,7 @@ let cardsList = [
   {
     id: 2,
     title: 'Write a React application',
-    description: "I need to write some useful tool using React",
+    description: "**I need to write** an useful tool using React. Go to my [website](http://www.bpaulino.com.br)",
     status: 'to-do',
     tasks: [
       {
