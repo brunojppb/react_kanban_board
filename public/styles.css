@@ -30,7 +30,7 @@ margin: 0;
   overflow: auto;
 }
 .list:not(:last-child):after{
-  content: "";
+  content: "❌";
   position: absolute;
   top: 0;
   right: 0;
@@ -67,5 +67,5 @@ content: '👉';
 }
 .checklist__task--remove:after{ display: inline-block;
 color: #d66;
-content: "+";
+content: "❌";
 }

@@ -6,6 +6,7 @@ let cardsList = [
     id: 1,
     title: 'Read the Pro React book',
     description: "I should read the whole book",
+    color: '#BD8D31',
     status: 'in-progress',
     tasks: []
   },
@@ -13,6 +14,7 @@ let cardsList = [
     id: 2,
     title: 'Write a React application',
     description: "**I need to write** an useful tool using React. Go to my [website](http://www.bpaulino.com.br)",
+    color: '#3A7E28',
     status: 'to-do',
     tasks: [
       {
