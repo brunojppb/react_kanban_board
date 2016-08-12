@@ -11,6 +11,14 @@ let cardsList = [
     tasks: []
   },
   {
+    id: 1,
+    title: 'Implement the Rails backend. This title is big enough to trigger the custom validator tha constrains the title length to 80 characters',
+    description: "I should read the whole book",
+    color: '#BD8D31',
+    status: 'done',
+    tasks: []
+  },
+  {
     id: 2,
     title: 'Write a React application',
     description: "**I need to write** an useful tool using React. Go to my [website](http://www.bpaulino.com.br)",
