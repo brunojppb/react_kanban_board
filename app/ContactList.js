@@ -8,15 +8,23 @@ class ContactList extends Component {
       (contact) => contact.name.toLowerCase().indexOf(this.props.filterText.toLowerCase()) !== -1
     );
 
-    return(
-      <ul>
-        {filteredContacts.map(
-          (contact) => <ContactItem key={contact.email}
-                                    name={contact.name}
-                                    email={contact.email} />
-        )}
-      </ul>
-    );
+    if(filteredContacts.length == 0) {
+      return (
+        <ul>
+          <li>No contacts found</li>
+        </ul>
+      );
+    } else {
+      return(
+        <ul>
+          {filteredContacts.map(
+            (contact) => <ContactItem key={contact.email}
+                                      name={contact.name}
+                                      email={contact.email} />
+          )}
+        </ul>
+      );
+    }
   }
 }
 
