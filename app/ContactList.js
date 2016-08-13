@@ -3,9 +3,14 @@ import ContactItem from './ContactItem';
 
 class ContactList extends Component {
   render() {
+
+    let filteredContacts = this.props.contacts.filter(
+      (contact) => contact.name.toLowerCase().indexOf(this.props.filterText.toLowerCase()) !== -1
+    );
+
     return(
       <ul>
-        {this.props.contacts.map(
+        {filteredContacts.map(
           (contact) => <ContactItem key={contact.email}
                                     name={contact.name}
                                     email={contact.email} />
@@ -16,7 +21,8 @@ class ContactList extends Component {
 }
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object)
+  contacts: PropTypes.arrayOf(PropTypes.object),
+  filterText: PropTypes.string.isRequired
 };
 
 export default ContactList;
