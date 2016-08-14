@@ -31,7 +31,32 @@ class KanbanBoardContainer extends Component {
   }
 
   addTask(cardId, taskName) {
-    console.log('added new task');
+    // Find the index of the card
+    let cardIndex = this.state.cards.findIndex((card) => card.id == cardId);
+    // create a new task
+    let newTask = { id: Date.now(), name: taskName, done: false };
+    // Create a new object and push the task to the array
+    let nextState = update(this.state.cards, {
+      [cardIndex]: {
+        tasks: { $push: [newTask] }
+      }
+    });
+    // Set the new state
+    this.setState({cards: nextState});
+
+    // Call the API to save the new task on the server
+    fetch(`${API_URL}/cards/${cardId}/tasks`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(newTask)
+    })
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      // when the server returns the new task ID
+      // update it on React;
+      newTask.id = jsonResponse.id;
+      this.setState({ cards: nextState });
+    });
   }
 
   removeTask(cardId, taskId, taskIndex) {
@@ -57,7 +82,35 @@ class KanbanBoardContainer extends Component {
   }
 
   toggleTask(cardId, taskId, taskIndex) {
-    console.log('toggled task');
+    // Find the index of the card
+    let cardIndex = this.state.cards.findIndex((card) => card.id == cardId);
+    // save a reference to the task's done value
+    let newDoneValue;
+    // Using the $apply command, you will change the done value to its opposite
+    let nextState = update(this.state.cards, {
+      [cardIndex]: {
+        tasks: {
+          [taskIndex]: {
+            done: {
+              $apply: (done) => {
+                newDoneValue = !done;
+                return newDoneValue;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // set the new state
+    this.setState({cards: nextState});
+
+    // Call the API to toggle the task on the server
+    fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
+      method: 'put',
+      headers: API_HEADERS,
+      body: JSON.stringify({ done: newDoneValue })
+    });
   }
 
   render() {
