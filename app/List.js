@@ -8,11 +8,12 @@ class List extends Component {
     // to child. That way, React keeps the ownership
     // of the props to the Parent component */}
     var cards = this.props.cards.map((card) => {
-      return <Card id={card.id}
+      return <Card key={card.id} id={card.id}
                     title={card.title}
                     description={card.description}
                     color={card.color}
-                    tasks={card.tasks} />
+                    tasks={card.tasks}
+                    taskCallbacks={this.props.taskCallbacks} />
     });
     {/* Return the List itself with its cards */}
     return (
@@ -26,7 +27,8 @@ class List extends Component {
 
 List.propTypes = {
   title: PropTypes.string.isRequired,
-  cards: PropTypes.arrayOf(PropTypes.object)
+  cards: PropTypes.arrayOf(PropTypes.object),
+  taskCallbacks: PropTypes.object
 };
 
 export default List;
