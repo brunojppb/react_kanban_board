@@ -31,6 +31,8 @@ class KanbanBoardContainer extends Component {
   }
 
   addTask(cardId, taskName) {
+    let prevState = this.state;
+
     // Find the index of the card
     let cardIndex = this.state.cards.findIndex((card) => card.id == cardId);
     // create a new task
@@ -50,16 +52,33 @@ class KanbanBoardContainer extends Component {
       headers: API_HEADERS,
       body: JSON.stringify(newTask)
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if(response.ok) {
+        return response.json()
+      } else {
+        // Throw an error if server response wasn't OK
+        // So you can rever back the optimistic changes
+        // made to the UI
+        throw new Error("Server response wasn't OK");
+      }
+    })
     .then((jsonResponse) => {
       // when the server returns the new task ID
       // update it on React;
       newTask.id = jsonResponse.id;
       this.setState({ cards: nextState });
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+      // revert back to prev state
+      this.setState(prevState);
     });
   }
 
   removeTask(cardId, taskId, taskIndex) {
+
+    let prevState = this.state;
+
     console.log('removed task');
     // Find the index of the card
     let cardIndex = this.state.cards.findIndex((card) => card.id == cardId);
@@ -78,10 +97,21 @@ class KanbanBoardContainer extends Component {
     fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
       method: 'delete',
       headers: API_HEADERS
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Error deleting tasks');
+      }
+    })
+    .catch((error) => {
+      this.setState(prevState);
+      console.error("Delete error:", error);
     });
   }
 
   toggleTask(cardId, taskId, taskIndex) {
+
+    let prevState = this.state;
     // Find the index of the card
     let cardIndex = this.state.cards.findIndex((card) => card.id == cardId);
     // save a reference to the task's done value
@@ -110,6 +140,17 @@ class KanbanBoardContainer extends Component {
       method: 'put',
       headers: API_HEADERS,
       body: JSON.stringify({ done: newDoneValue })
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Error toggle task');
+      } else {
+        console.log('OK! toogle!');
+      }
+    })
+    .catch((error) => {
+      this.setState(prevState);
+      console.error('Error Toggle:', error);
     });
   }
 
@@ -127,3 +168,5 @@ class KanbanBoardContainer extends Component {
 
 
 export default KanbanBoardContainer;
+
+//adilson.pb@gmail.com
