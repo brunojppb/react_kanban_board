@@ -1,5 +1,45 @@
 import React, { Component } from 'react';
-import KanbanBoardContainer from './KanbanBoardContainer';
 import { render } from 'react-dom';
 
-render(<KanbanBoardContainer />, document.getElementById('root'));
+import About from './About';
+import Home from './Home';
+import Repos from './Repos';
+
+class App extends Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      route: window.location.hash.substr(1)
+    };
+  }
+
+  componentDidMount() {
+    window.addEventListener('hashchange', () => {
+      this.setState({
+        route: window.location.hash.substr(1)
+      });
+    });
+  }
+
+  render() {
+    var Child;
+    switch (this.state.route) {
+      case '/about': Child = About; break;
+      case '/repos': Child = Repos; break;
+      default: Child = Home;
+    }
+
+    return(
+      <div>
+        <header>App</header>
+        <menu>
+          <ul><a href="#/about">About</a></ul>
+          <ul><a href="#/repos">Repos</a></ul>
+        </menu>
+        <Child />
+      </div>
+    );
+  }
+}
+
+render(<App />, document.getElementById('root'));
