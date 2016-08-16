@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import Task from './Task';
 
 class CheckList extends Component {
 
@@ -11,19 +13,24 @@ class CheckList extends Component {
 
   render() {
     let tasks = this.props.tasks.map((task, taskIndex) => (
-      <li className="checklist__task" key={task.id} >
-        <input type="checkbox" defaultChecked={task.done} onChange={
-            this.props.taskCallbacks.toggle.bind(null, this.props.cardId, task.id, taskIndex) }/>
-        {task.name}
-        <a href="#" className="checklist__task--remove" onClick={
-            this.props.taskCallbacks.remove.bind(null, this.props.cardId, task.id, taskIndex) }/>
-      </li>
+
+      <Task id={task.id}
+              done={task.done}
+              name={task.name}
+              cardId={this.props.cardId}
+              taskIndex={taskIndex}
+              taskCallbacks={this.props.taskCallbacks}
+              key={task.id} />
     ));
 
     return (
       <div className="checklist">
         <ul>
+          <ReactCSSTransitionGroup transitionName="task"
+                                    transitionEnterTimeout={300}
+                                    transitionLeaveTimeout={300} >
           {tasks}
+        </ReactCSSTransitionGroup>
           <input type="text"  className="checklist--add-task"
                               placeholder="Type in then hit enter to add a task"
                               onKeyPress={this.checkInputKeyPress.bind(this) }/>

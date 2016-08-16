@@ -44,7 +44,7 @@ class KanbanBoardContainer extends Component {
       }
     });
     // Set the new state
-    this.setState({cards: nextState});
+    // this.setState({cards: nextState});
 
     // Call the API to save the new task on the server
     fetch(`${API_URL}/cards/${cardId}/tasks`, {

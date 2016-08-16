@@ -96,3 +96,23 @@ content: "❌";
   overflow: hidden;
   transition: max-height .25s ease-out;
 }
+
+.task-enter {
+  opacity: 0;
+}
+
+.task-enter.task-enter-active {
+  opacity: 1;
+  transition: 0.5s;
+}
+
+.task-leave {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.task-leave.task-leave-active {
+  opacity: 0;
+  transform: translateX(250px);
+  transition: 0.3s;
+}
