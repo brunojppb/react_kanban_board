@@ -31,6 +31,7 @@ class List extends Component {
                     description={card.description}
                     color={card.color}
                     tasks={card.tasks}
+                    status={card.status}
                     taskCallbacks={this.props.taskCallbacks}
                     cardCallbacks={this.props.cardCallbacks}/>
     });
