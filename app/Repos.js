@@ -13,9 +13,18 @@ class Repos extends Component {
 
   componentDidMount() {
     fetch('https://api.github.com/users/brunojppb/repos')
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error("Server response wasn't OK");
+      }
+    })
     .then((responseData) => {
       this.setState({repositories: responseData});
+    })
+    .catch((error) => {
+      this.props.history.pushState(null, '/error');
     });
   }
 
