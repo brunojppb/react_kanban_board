@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Router, Route, Link } from 'react-router';
+import { Router, Route, IndexRoute, Link, hashHistory} from 'react-router';
 
 import About from './About';
 import Home from './Home';
 import Repos from './Repos';
+import RepoDetails from './RepoDetails';
 
 class App extends Component {
 
@@ -29,10 +30,13 @@ class App extends Component {
 }
 
 render((
-  <Router>
+  <Router history={hashHistory}>
     <Route path="/" component={App}>
+      <IndexRoute component={Home}/>
       <Route path="about" component={About} />
-      <Route path="repos" component={Repos} />
+      <Route path="repos" component={Repos}>
+        <Route path="details/:repo_name" component={RepoDetails} />
+      </Route>
     </Route>
   </Router>
 ), document.getElementById('root'));
