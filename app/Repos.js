@@ -26,13 +26,22 @@ class Repos extends Component {
       </li>
     ));
 
+    let child = this.props.children &&
+                React.cloneElement(this.props.children,
+                                  {repositories: this.state.repositories});
+
     return (
       <div>
         <h1>Github Repos</h1>
         <ul>
           {repos}
         </ul>
-        {this.props.children}
+        {/*
+          this.props.children
+          the children prop will render the nested component based
+          on the component that was injected by React Router
+          */}
+        {child}
       </div>
     );
   }

@@ -16,13 +16,17 @@ class App extends Component {
         <menu>
           <ul>
             <li>
-              <Link to="/about">About</Link>
+              <Link to="/about" activeClassName="active">About</Link>
             </li>
             <li>
-              <Link to="/repos">Repos</Link>
+              <Link to="/repos" activeClassName="active">Repos</Link>
             </li>
           </ul>
         </menu>
+        {/*
+          the children prop will render the nested component based
+          on the component that was injected by React Router
+          */}
         {this.props.children}
       </div>
     );
@@ -33,7 +37,7 @@ render((
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
-      <Route path="about" component={About} />
+      <Route path="about" component={About} title="About Us"/>
       <Route path="repos" component={Repos}>
         <Route path="details/:repo_name" component={RepoDetails} />
       </Route>
