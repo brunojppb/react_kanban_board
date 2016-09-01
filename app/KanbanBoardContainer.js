@@ -30,6 +30,83 @@ class KanbanBoardContainer extends Component {
     });
   }
 
+  addCard(card) {
+    //  Keep a reference to the previus state
+    // in case we need to rollback
+    let prevState = this.state;
+
+    // Add temporary ID to the card
+    if (card.id === null) {
+      let card = Object.assign({}, card, {id: Date.now()});
+    }
+
+    // Create a new object and push the new card to the array of cards
+    let nextState = update(this.state.cards, {  $push: [card] });
+
+    // set the component state to the mutated object
+    this.setState(nextState);
+
+    // Call the API to add the card on the server
+    fetch(`${API_URL}/cards`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(card)
+    })
+    .then((response) => {
+      if(response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Server response wasn't OK");
+      }
+    })
+    .then((responseData) => {
+      //When the server returns the definitive ID
+      // used for the new card on the serve, update it on React
+      card.id = responseData.id;
+      this.setState({cards: nextState});
+    })
+    .catch((error) => {
+      this.setState(prevState);
+    });
+  }
+
+  updateCard(card) {
+    //  Keep a reference to the previus state
+    // in case we need to rollback
+    let prevState = this.state;
+
+    let cardIndex = htis.state.cards.findIndex((c) => c.id == card.id);
+
+    // Using the $set command will change the whole card
+    let nextState = update(
+                        this.state.cards, {
+                          [cardIndex]: { $set: card }
+                        }
+                    );
+   // Set the component state to the mutated object
+    this.setState({ cards: nextState });
+
+    // Call API
+    fetch(`${API_URL}/cards/${card.id}`, {
+      method: 'put',
+      headers: API_HEADERS,
+      body: JSON.stringfy(card)
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        // Throw error if the response isn't OK
+        // And revert the optimistic changes in the UI
+        throw new Error("Server response wasn't OK");
+      }
+    })
+    .catch((error) => {
+      console.error('Fetch Error: ', error);
+      this.setState(prevState);
+    });
+  }
+
   addTask(cardId, taskName) {
     let prevState = this.state;
 
@@ -217,21 +294,26 @@ class KanbanBoardContainer extends Component {
   }
 
   render() {
-    return < KanbanBoard cards={this.state.cards}
-                        taskCallbacks={
-                          {
-                            toggle: this.toggleTask.bind(this),
-                            remove: this.removeTask.bind(this),
-                            add: this.addTask.bind(this)
-                          }
-                        }
-                        cardCallbacks={
-                          {
-                            updateStatus: this.updateCardStatus.bind(this),
-                            updatePosition: this.updateCardPosition.bind(this),
-                            persistCardDrag: this.persistCardDrag.bind(this)
-                          }
-                        }/>
+    // Getting the children component that was injected
+    // by the Router, which is a KanbanBoard Component
+    let kanbanBoard = this.props.children && React.cloneElement(this.props.children, {
+      cards: this.state.cards,
+      taskCallbacks: {
+        toggle: this.toggleTask.bind(this),
+        remove: this.removeTask.bind(this),
+        add: this.addTask.bind(this)
+      },
+      cardCallbacks: {
+        addCard: this.addCard.bind(this),
+        updateCard: this.updateCard.bind(this),
+        updateStatus: this.updateCardStatus.bind(this),
+        updatePosition: this.updateCardPosition.bind(this),
+        persistCardDrag: this.persistCardDrag.bind(this)
+      }
+    });
+
+    return kanbanBoard;
+
   }
 }
 
