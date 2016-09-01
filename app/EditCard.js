@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import CardForm from './CardForm';
 
 class EditCard extends Component {
 
