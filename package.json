@@ -5,7 +5,7 @@
   "author": "Bruno Paulino",
   "license": "ISC",
   "scripts": {
-    "start": "webpack-dev-server --progress",
+    "start": "webpack-dev-server --progress --host 0.0.0.0",
     "build": "NODE_ENV=production node_modules/.bin/webpack -p --progress --colors"
   },
   "devDependencies": {

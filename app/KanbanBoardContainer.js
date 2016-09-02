@@ -75,7 +75,7 @@ class KanbanBoardContainer extends Component {
     // in case we need to rollback
     let prevState = this.state;
 
-    let cardIndex = htis.state.cards.findIndex((c) => c.id == card.id);
+    let cardIndex = this.state.cards.findIndex((c) => c.id == card.id);
 
     // Using the $set command will change the whole card
     let nextState = update(
@@ -90,7 +90,7 @@ class KanbanBoardContainer extends Component {
     fetch(`${API_URL}/cards/${card.id}`, {
       method: 'put',
       headers: API_HEADERS,
-      body: JSON.stringfy(card)
+      body: JSON.stringify(card)
     })
     .then((response) => {
       if (response.ok) {
